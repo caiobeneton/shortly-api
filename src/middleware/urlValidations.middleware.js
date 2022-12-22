@@ -34,3 +34,28 @@ export async function postValidation(req, res, next) {
 
     next()
 }
+
+export async function getByIdValidation(req, res, next) {
+    const id = req.params.id
+
+    if (!id) {
+        return res.sendStatus(422)
+    }
+
+    try {
+        const getUrl = await connectionDB.query(`SELECT id, "shortUrl", url FROM urls WHERE id = ($1);`, [id])
+
+        if (getUrl.rows.length === 0) {
+            return res.status(404).send("Not found")
+        }
+
+        const selectedUrl = getUrl.rows[0]
+
+        res.locals.selectedUrl = selectedUrl
+
+    } catch (error) {
+        res.sendStatus(500)
+    }
+
+    next()
+}

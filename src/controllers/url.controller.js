@@ -16,3 +16,9 @@ export async function postUrl(req, res) {
         res.sendStatus(500)
     }
 }
+
+export async function getUrl(req, res) {
+    const selectedUrl = res.locals.selectedUrl
+
+    res.status(200).send(selectedUrl)
+}
