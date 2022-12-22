@@ -2,6 +2,7 @@ import express, { json } from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import signRoutes from "./routes/sign.routes.js"
+import urlRoutes from "./routes/url.routes.js"
 
 dotenv.config()
 
@@ -10,6 +11,7 @@ app.use(cors())
 app.use(json())
 
 app.use(signRoutes)
+app.use(urlRoutes)
 
 app.use((req, res) => {
     res.status(404).send("Rota não encontrada!")
