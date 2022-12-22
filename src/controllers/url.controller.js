@@ -35,3 +35,16 @@ export async function getShortUrl(req, res) {
         res.sendStatus(500)
     }
 }
+
+export async function deleteUrl(req, res) {
+    const deleteId = res.locals.deleteId
+
+    try {
+        await connectionDB.query(`DELETE FROM urls WHERE id = ($1);`, [deleteId])
+        await connectionDB.query(`DELETE FROM urlscount WHERE "urlId" = ($1);`, [deleteId])
+
+        res.sendStatus(204)
+    } catch (error) {
+        res.sendStatus(500)
+    }
+}
