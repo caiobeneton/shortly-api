@@ -59,3 +59,29 @@ export async function getByIdValidation(req, res, next) {
 
     next()
 }
+
+export async function shortValidation(req, res, next) {
+    const shortUrl = req.params.shortUrl
+
+    if (!shortUrl) {
+        return res.sendStatus(422)
+    }
+
+    try {
+        const getShort = await connectionDB.query(`SELECT id, url, "usersId" FROM urls WHERE "shortUrl" = ($1);`,
+        [shortUrl])
+
+        if (getShort.rows.length === 0) {
+            return res.status(404).send("Not found")
+        }
+
+        res.locals.selectedUrl = getShort.rows[0].url
+        res.locals.userId = getShort.rows[0].usersId
+        res.locals.urlId = selectUrl.rows[0].id
+        
+    } catch (error) {
+        res.sendStatus(500)
+    }
+
+    next()
+}

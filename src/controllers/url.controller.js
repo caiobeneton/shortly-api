@@ -22,3 +22,16 @@ export async function getUrl(req, res) {
 
     res.status(200).send(selectedUrl)
 }
+
+export async function getShortUrl(req, res) {
+    const { selectedUrl, userId, urlId } = res.locals
+
+    try {
+        await connectionDB.query(`INSERT INTO urlscount ("usersId", "urlId") VALUES($1, $2);`,
+        [userId, urlId])
+
+        res.redirect(selectedUrl)
+    } catch (error) {
+        res.sendStatus(500)
+    }
+}
