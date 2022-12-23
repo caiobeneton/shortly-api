@@ -11,9 +11,9 @@ export async function signUp(req, res) {
         await connectionDB.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3);`,
         [name, email, hashPassword])
 
-        res.sendStatus(201)
+        return res.sendStatus(201)
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }
 
@@ -25,8 +25,8 @@ export async function signIn(req, res) {
     try {
         await connectionDB.query(`INSERT INTO sessions ("usersId", token) VALUES ($1, $2);`, [userId, token])
 
-        res.status(200).send({ token: token })
+        return res.status(200).send({ token: token })
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }

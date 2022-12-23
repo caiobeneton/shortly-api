@@ -23,7 +23,8 @@ export async function userValidation(req, res, next) {
         res.locals.userId = userId
 
     } catch (error) {
-        res.sendStatus(500)
+        console.log(error);
+        return res.sendStatus(500)
     }
 
     next()

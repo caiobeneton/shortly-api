@@ -2,25 +2,25 @@ import connectionDB from "../database/database.js"
 import { nanoid } from "nanoid"
 
 export async function postUrl(req, res) {
-    const url = req.body
+    const {url} = req.body
     const shortUrl = nanoid(8)
 
-    usersId = res.locals.usersId
+    const usersId = res.locals.usersId
 
     try {
         await connectionDB.query(`INSERT INTO urls (url, "shortUrl", "usersId") VALUES($1, $2, $3);`,
         [url, shortUrl, usersId])
 
-        res.status(201).send(shortUrl)
+        return res.status(201).send(shortUrl)
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }
 
 export async function getUrl(req, res) {
     const selectedUrl = res.locals.selectedUrl
 
-    res.status(200).send(selectedUrl)
+    return res.status(200).send(selectedUrl)
 }
 
 export async function getShortUrl(req, res) {
@@ -30,9 +30,9 @@ export async function getShortUrl(req, res) {
         await connectionDB.query(`INSERT INTO urlscount ("usersId", "urlId") VALUES($1, $2);`,
         [userId, urlId])
 
-        res.redirect(selectedUrl)
+        return res.redirect(selectedUrl)
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }
 
@@ -43,8 +43,8 @@ export async function deleteUrl(req, res) {
         await connectionDB.query(`DELETE FROM urls WHERE id = ($1);`, [deleteId])
         await connectionDB.query(`DELETE FROM urlscount WHERE "urlId" = ($1);`, [deleteId])
 
-        res.sendStatus(204)
+        return res.sendStatus(204)
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }

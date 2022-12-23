@@ -29,7 +29,7 @@ export async function postValidation(req, res, next) {
         res.locals.usersId = usersId
 
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 
     next()
@@ -54,7 +54,7 @@ export async function getByIdValidation(req, res, next) {
         res.locals.selectedUrl = selectedUrl
 
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 
     next()
@@ -77,10 +77,11 @@ export async function shortValidation(req, res, next) {
 
         res.locals.selectedUrl = getShort.rows[0].url
         res.locals.userId = getShort.rows[0].usersId
-        res.locals.urlId = selectUrl.rows[0].id
+        res.locals.urlId = getShort.rows[0].id
 
     } catch (error) {
-        res.sendStatus(500)
+        console.log(error)
+        return res.sendStatus(500)
     }
 
     next()
@@ -121,7 +122,7 @@ export async function deleteValidation(req, res, next) {
 
         res.locals.deleteId = userUrl.rows[0].id
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 
     next()

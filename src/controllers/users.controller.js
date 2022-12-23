@@ -8,14 +8,17 @@ export async function getUser(req, res) {
 
         const urlCount = await connectionDB.query(`SELECT urls.id, urls."shortUrl", urls."url", COUNT(urlscount."urlId") AS "visitCount" FROM urls JOIN urlscount ON urlscount."urlId" = urls.id WHERE urls."usersId" = $1 GROUP BY urls.id;`, [userId])
 
+        console.log(urlCount);
+
         const userInfo = userProfile.rows[0]
 
         userInfo.shortenedUrls = urlCount.rows
 
-        res.status(200).send(userInfo)
+        return res.status(200).send(userInfo)
 
     } catch (error) {
-        res.sendStatus(500)
+        console.log(error);
+        return res.sendStatus(500)
     }
 }
 
@@ -25,9 +28,9 @@ export async function getRanking(req, res) {
 
         const topTen = ranking.rows.slice(0, 10)
 
-        res.status(200).send(topTen)
+        return res.status(200).send(topTen)
 
     } catch (error) {
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }

@@ -22,11 +22,12 @@ export async function signUpValidator(req, res, next) {
     try {
         const checkEmail = await connectionDB.query(`SELECT email FROM users WHERE email = ($1);`, [email])
 
-        if (checkEmail) {
+        if (checkEmail.rows[0]) {
             return res.status(409).send("Email already exists")
         } 
     } catch (error) {
-        res.sendStatus(500)
+        console.log(error)
+        return res.sendStatus(500)
     }
 
     next()
@@ -45,7 +46,7 @@ export async function signInValidator(req, res, next) {
     const { email, password } = user
 
     try {
-        const checkUser = await connectionDB.query(`SELECT email FROM users WHERE email = ($1);`, [email])
+        const checkUser = await connectionDB.query(`SELECT email, password, id FROM users WHERE email = ($1);`, [email])
 
         if (checkUser.rows.length === 0) {
             return res.status(401).send("User not found, check email or password")
@@ -60,7 +61,8 @@ export async function signInValidator(req, res, next) {
             return res.status(401).send("User not found, check email or password")
         }
     } catch (error) {
-        res.sendStatus(500)
+        console.log(error);
+        return res.sendStatus(500)
     }
 
     next()
