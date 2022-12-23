@@ -19,3 +19,15 @@ export async function getUser(req, res) {
     }
 }
 
+export async function getRanking(req, res) {
+    try {
+        const ranking = await connectionDB.query(`SELECT users.id, users.name, COUNT(DISTINCT urls.id) AS "linksCount", COUNT(urlscount."urlId") AS "visitCount" FROM users LEFT JOIN urls ON urls."usersId"= users.id LEFT JOIN urlscount ON urlscount."urlId" = urls.id GROUP BY users.id ORDER BY "visitCount" DESC;`)
+
+        const topTen = ranking.rows.slice(0, 10)
+
+        res.status(200).send(topTen)
+
+    } catch (error) {
+        res.sendStatus(500)
+    }
+}
